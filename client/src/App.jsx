@@ -1,19 +1,17 @@
 import {BrowserRouter, Routes, Route} from "react-router-dom"
-import Login from './pages/auth/Login'
-import Name from './pages/onboarding/Name'
-import Gender from './pages/onboarding/gender'
+import Register  from "./pages/auth/Register"
 import VerifyOtp from "./pages/auth/VerifyOtp"
+import SignUp from "./pages/auth/SignUp"
+
 
 function App() {
 
   return (
     <BrowserRouter>
       <Routes>
-        <Route path='/' element={<Login />}/>
-        <Route path='/auth/login'  element={<Login />}/>
-        <Route path='/auth/verify-otp'  element={<VerifyOtp />}/>
-        <Route path='/onbording/gender'  element={<Gender/>}/>
-        <Route path='/onbording/name'  element={<Name />}/>
+        <Route path='/' element={<Register />}/>
+        <Route path='/auth/VerifyOtp' element={<VerifyOtp />}/>
+        <Route path='/auth/SignUp' element={<SignUp />}/>
       </Routes>
     </BrowserRouter>
   )

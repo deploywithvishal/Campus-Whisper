@@ -1,39 +1,65 @@
-import React from 'react'
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { verifyOtp } from "../../services/authService";
-
+import { useNavigate, useLocation } from "react-router";
+import axios from "axios";
 
 const VerifyOtp = () => {
   const [otp, setOtp] = useState("");
   const navigate = useNavigate();
+  const location = useLocation();
 
-  const handleVerify = async () => {
+  const email = location.state?.email;
+
+  const handleVerify = async (e) => {
+    e.preventDefault();
+
     try {
-      const email = localStorage.getItem("email");
+      const res = await axios.post(
+        "http://localhost:5000/auth/verify-otp",
+        { email, otp }
+      );
 
-      const res = await verifyOtp(email, otp);
-
-      localStorage.setItem("token", res.data.token);
-
-      // 👉 OTP ke baad onboarding start
-      navigate("/onboarding/gender");
+      if (res.data.success) {
+        navigate("/SignUp", { state: { email } });
+      }
     } catch (err) {
-      alert("Invalid OTP: "+err);
+      console.error(err);
+      alert("Invalid OTP");
     }
   };
 
   return (
-    <div>
-      <h2>Verify OTP</h2>
-      <input
-        type="text"
-        placeholder="Enter OTP"
-        onChange={(e) => setOtp(e.target.value)}
-      />
-      <button onClick={handleVerify}>Verify</button>
+    <div className="min-h-screen flex items-center justify-center bg-slate-950">
+      <div className="bg-slate-900 p-8 rounded-xl w-full max-w-sm shadow-lg">
+        
+        <h2 className="text-2xl text-white mb-6 text-center">
+          Verify OTP
+        </h2>
+
+        <form onSubmit={handleVerify} className="space-y-4">
+          <input
+            type="text"
+            maxLength={6}
+            placeholder="Enter 6-digit OTP"
+            value={otp}
+            onChange={(e) => setOtp(e.target.value)}
+            className="w-full h-12 px-4 rounded-lg bg-slate-800 text-white border border-slate-700 focus:outline-none focus:border-purple-500 text-center tracking-widest"
+            required
+          />
+
+          <button
+            type="submit"
+            className="w-full h-12 bg-purple-600 text-white rounded-lg"
+          >
+            Verify
+          </button>
+        </form>
+
+        <p className="text-slate-400 text-sm mt-4 text-center">
+          OTP sent to {email || "your email"}
+        </p>
+      </div>
     </div>
   );
-}
+};
 
-export default VerifyOtp
+export default VerifyOtp;
