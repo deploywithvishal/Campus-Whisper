@@ -10,22 +10,26 @@ const VerifyOtp = () => {
   const email = location.state?.email;
 
   const handleVerify = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    try {
-      const res = await axios.post(
-        "http://localhost:5000/auth/verify-otp",
-        { email, otp }
-      );
+  try {
+    const res = await axios.post(
+      "http://localhost:5000/auth/verify-otp",
+      { email, otp }
+    );
 
-      if (res.data.success) {
-        navigate("/SignUp", { state: { email } });
-      }
-    } catch (err) {
-      console.error(err);
-      alert("Invalid OTP");
+    if (res.data.success) {
+      const tempToken = res.data.tempToken;
+
+      navigate("/auth/SignUp", { 
+        state: { email, tempToken } 
+      });
     }
-  };
+  } catch (err) {
+    console.error(err);
+    alert("Invalid OTP");
+  }
+};
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-slate-950">

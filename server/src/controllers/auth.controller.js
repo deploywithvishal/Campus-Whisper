@@ -80,7 +80,7 @@ export const verifyOTP = async (req, res) => {
   }
 };
 
-export const register = async (req, res) => {
+export const signup = async (req, res) => {
   try {
     const { email, password, gender, tempToken } = req.body;
 
