@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+
 
 const SignUp = () => {
   const location = useLocation();
+  const navigate = useNavigate();
 
   const email = location.state?.email;
   const tempToken = location.state?.tempToken;
@@ -24,9 +27,8 @@ const SignUp = () => {
           tempToken,
         }
       );
-
+      navigate("/auth/Login", { state: { email } });
       console.log(res.data);
-      alert("Signup successful");
     } catch (err) {
       console.error(err);
       alert("Signup failed");
